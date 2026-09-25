@@ -43,7 +43,7 @@ describe('AppController (e2e)', () => {
       .expect(200);
 
     expect(response.body.errors).toBeUndefined();
-    expect(response.body.data.profile.name).toBe('Kraitcer');
+    expect(response.body.data.profile.name).toBe('Крайцер Глеб Геннадьевич');
     expect(response.body.data.profile.skills.length).toBeGreaterThan(0);
     expect(response.body.data.profile.experience.length).toBeGreaterThan(0);
     expect(response.body.data.profile.projects.length).toBeGreaterThan(0);

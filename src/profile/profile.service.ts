@@ -33,9 +33,7 @@ export class ProfileService implements OnModuleInit {
     });
 
     if (existing) {
-      await this.prisma.profile.delete({
-        where: { id: existing.id },
-      });
+      return;
     }
 
     await this.prisma.profile.create({
