@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 const profileInclude = {
@@ -8,12 +8,8 @@ const profileInclude = {
 };
 
 @Injectable()
-export class ProfileService implements OnModuleInit {
+export class ProfileService {
   constructor(private readonly prisma: PrismaService) {}
-
-  async onModuleInit() {
-    await this.seed();
-  }
 
   async getProfile() {
     const profile = await this.prisma.profile.findFirst({
@@ -28,16 +24,10 @@ export class ProfileService implements OnModuleInit {
   }
 
   async seed() {
-    const existing = await this.prisma.profile.findFirst({
-      select: { id: true },
-    });
-
-    if (existing) {
-      return;
-    }
-
-    await this.prisma.profile.create({
-      data: {
+    await this.prisma.profile.upsert({
+      where: { id: 1 },
+      update: {},
+      create: {
         name: 'Крайцер Глеб Геннадьевич',
         description:
           'Fullstack-разработчик с инженерным образованием и опытом в системном администрировании, связи, медиапроизводстве и веб-разработке. Специализируюсь на JavaScript/TypeScript, Python, React, Vue и Node.js. Применяю системное мышление и технический бэкграунд, чтобы разбираться в сложных системах и доводить задачи до рабочего результата.',

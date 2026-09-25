@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module.js';
+import { ProfileService } from './../src/profile/profile.service.js';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -14,13 +15,14 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    await app.get(ProfileService).seed();
   });
 
   it('/ (GET)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('Digital Business Card API');
   });
 
   it('returns the profile with related data through GraphQL', async () => {
