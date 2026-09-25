@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
-import { ProfileService } from '../src/profile/profile.service.js';
+import { seedProfile } from './seed-profile.js';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
@@ -15,7 +15,7 @@ const prisma = new PrismaClient({
 
 try {
   await prisma.$connect();
-  await new ProfileService(prisma).seed();
+  await seedProfile(prisma);
 } finally {
   await prisma.$disconnect();
 }

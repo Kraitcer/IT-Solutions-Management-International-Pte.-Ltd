@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
@@ -8,13 +9,13 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor() {
+  constructor(config: ConfigService) {
     const adapter = new PrismaPg({
-      host: process.env.DB_HOST ?? 'localhost',
-      port: Number(process.env.DB_PORT ?? 5432),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: config.get<string>('DB_HOST', 'localhost'),
+      port: Number(config.get<string>('DB_PORT', '5432')),
+      user: config.getOrThrow<string>('DB_USER'),
+      password: config.getOrThrow<string>('DB_PASSWORD'),
+      database: config.getOrThrow<string>('DB_NAME'),
     });
     super({ adapter });
   }
